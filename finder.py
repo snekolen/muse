@@ -73,11 +73,9 @@ def findUrl(songDict): #Passes in a dictionary
     vidIDs = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     watchLink += vidIDs[0]
     songDict["URL"] = watchLink
+    songDict["ID"] = vidIDs[0]
     return songDict
 
-
-#dicts = queue("United States", 1990)
-#print(addUrl(dicts))
 
 
 
