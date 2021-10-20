@@ -3,13 +3,11 @@ from discord import voice_client
 from discord.ext import commands
 from finder import findSong, findUrl
 from countries import allCountries, countryExists
-import ffmpeg
-import youtube_dl
-import os
 
 client = commands.Bot(command_prefix = "+")
 playing = False
 
+#Organize things into classes (Countries, Song, and Top)
 #Make a help page
 
 @client.event
@@ -41,17 +39,17 @@ async def _list(ctx, year: int):
         page1 = discord.Embed(
             title = str(year) + "s Countries (1/" + str(len(clist)) + ")",
             description = clist[0],
-            color = discord.Color.blue()
+            color = discord.Color.blurple()
         )
         page2 = discord.Embed(
             title = str(year) + "s Countries (2/" + str(len(clist)) + ")",
             description = clist[1],
-            color = discord.Color.blue()
+            color = discord.Color.blurple()
         )
         page3 = discord.Embed(
             title = str(year) + "s Countries (3/" + str(len(clist)) + ")",
             description = clist[2],
-            color = discord.Color.blue()
+            color = discord.Color.blurple()
         )
         pages = [page1, page2, page3]
         
@@ -59,64 +57,64 @@ async def _list(ctx, year: int):
             page4 = discord.Embed(
                 title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
                 description = clist[3],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page4)
         elif len(clist) == 5:
             page4 = discord.Embed(
                 title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
                 description = clist[3],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page4)
             page5 = discord.Embed(
                 title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
                 description = clist[4],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page5)
         elif len(clist) == 6:
             page4 = discord.Embed(
                 title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
                 description = clist[3],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page4)
             page5 = discord.Embed(
                 title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
                 description = clist[4],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page5)
             page6 = discord.Embed(
                 title = str(year) + "s Countries (6/" + str(len(clist)) + ")",
                 description = clist[5],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page6)
         elif len(clist) == 7:
             page4 = discord.Embed(
                 title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
                 description = clist[3],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page4)
             page5 = discord.Embed(
                 title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
                 description = clist[4],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page5)
             page6 = discord.Embed(
                 title = str(year) + "s Countries (6/" + str(len(clist)) + ")",
                 description = clist[5],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page6)
             page7 = discord.Embed(
                 title = str(year) + "s Countries (7/" + str(len(clist)) + ")",
                 description = clist[6],
-                color = discord.Color.blue()
+                color = discord.Color.blurple()
             )
             pages.append(page7)
             
@@ -157,29 +155,13 @@ async def _list(ctx, year: int):
     
         await message.clear_reactions()
 
-
-@client.command(name = "join") #Makes bot join VC
-async def join(ctx):
-    userConnected = ctx.author.voice 
-    try:
-        if userConnected:
-            await userConnected.channel.connect()
-        else:
-            raise Exception("Please connect to the voice channel")
-    except Exception as e:
-        await ctx.send(e)
         
 
-@client.command(name = "play", pass_context = True) #Plays music based on command
-async def _play(ctx, *args): #Args include word(s) in the country's name and year
+@client.command(name = "song", pass_context = True) #Plays music based on command
+async def song(ctx, *args): #Args include word(s) in the country's name and year
     country = " ".join(args[0:len(args) - 1])
     year = args[len(args) - 1]
-    '''
-    if not ctx.voice_client:
-        userConnected = ctx.author.voice 
-        await userConnected.channel.connect()
-    '''
-              
+    valid = True
     try:
         if len(args) == 1 or args[len(args) - 1].isnumeric() == False: 
             raise Exception("Please re-enter your command in the format '+play [country] [year]'")
@@ -190,67 +172,28 @@ async def _play(ctx, *args): #Args include word(s) in the country's name and yea
         elif countryExists(country, int(year)) == False:
             raise Exception(country + " did not exist in the " + str(year)+ "s")
     except Exception as e:
+        valid = False
         await ctx.send(e)
-    await ctx.send("Loading song from " + country + " in the " + year + "s...")
 
     #Finding and playing songs
-    songDict = findSong(country, int(year))
-    songDict = findUrl(songDict)
-    await ctx.send(songDict["Song"] + " by " + songDict["Artist"] + ", released " + songDict["Year"]) #Info about song
-    await ctx.send(songDict["URL"]) #Line 2
-    
-    song_there = os.path.isfile("song.mp3")
+    if valid == True:
+        songDict = findSong(country, int(year))
+        songDict = findUrl(songDict)
+        imgLink = "https://img.youtube.com/vi/" + songDict["ID"] + "/0.jpg"
 
-    try:
-        if song_there:
-            os.remove("song.mp3")
-    except PermissionError:
-        return
-    
-    voiceChannel = discord.utils.get(ctx.guild.voice_channels, name = "General") #Change name part to name of voice channel
-    await voiceChannel.connect()
-    voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
-
-    url = songDict["URL"]
-    ydl_opts = {
-        "format" : "bestaudio/best", 
-        "postprocessors" : [{
-            "key" : "FFmpegExtractAudio", 
-            "preferredcodec" : "mp3",
-            "preferredquality": "192",
-        }],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-    for file in os.listdir("./"):
-        if file.endswith(".mp3"):
-            os.rename(file, "song.mp3")
-    voice.play(discord.FFmpegPCMAudio("song.mp3"))  
-    #include error handling for whether the message author is connected
-
-            
-#Include skip, resume, and pause commands
-@client.command(name = "resume")
-async def resume(ctx):
-    pass
-
-@client.command(name = "pause")
-async def pause(ctx):
-    pass
-
-@client.command(name = "skip")
-async def skip(ctx):
-    pass
+        link = "**[" + songDict["Song"] + "](" + songDict["URL"] + ")**"
+        embed = discord.Embed(
+            color= discord.Colour.orange(),  # or any color you want
+            title = "𝄞♫♪♩",
+            description = link
+        )
         
-@client.command(name = "leave") #Makes bot leave voice channel
-async def leave(ctx):
-    try:
-        if ctx.voice_client:
-            await ctx.guild.voice_client.disconnect()
-        else:
-            raise Exception("Bot is already disconnected from voice channel")
-    except Exception as e:
-        await ctx.send(e)
+        embed.add_field(name = "Artist", value = songDict["Artist"], inline = False)
+        embed.add_field(name = "Released", value = songDict["Year"], inline = True)
+        embed.add_field(name = "Country ", value = country, inline = True)
+        embed.set_thumbnail(url = imgLink)
+
+        await ctx.send(embed=embed)
 
     
 #Create a class to keep track of top countries, decades, and songs
@@ -269,4 +212,4 @@ async def top(ctx, category):
             await ctx.send(e)
 
 
-client.run('ODQ0Nzc1NTk3NDk4ODI2ODMy.YKXUlQ.sNQPt6p-yt0fvqoSvFtCs7rrBu0') 
+client.run('ODk5MDAyNzQyOTg5NzkxMjcz.YWsbjA.HggprO-Y1kzbSAUBhoQwqM-zHD4')
