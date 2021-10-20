@@ -212,4 +212,4 @@ async def top(ctx, category):
             await ctx.send(e)
 
 
-client.run('ODk5MDAyNzQyOTg5NzkxMjcz.YWsbjA.HggprO-Y1kzbSAUBhoQwqM-zHD4')
+client.run('a')
