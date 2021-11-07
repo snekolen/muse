@@ -5,9 +5,10 @@ from finder import findSong, findUrl
 from countries import allCountries, countryExists
 
 client = commands.Bot(command_prefix = "+")
-playing = False
+client.remove_command("help")
 
-#Organize things into classes (Countries, Song, and Top)
+#Organize things into classes (Song and Top) 
+#Top points to class to get info about country and decade and takes name/id of server as parameter
 #Make a help page
 
 @client.event
@@ -23,9 +24,28 @@ async def on_command_error(ctx, error): #Add for CommandNotFound
     elif isinstance(error, commands.BadArgument):
         await ctx.send("Unable to convert between data types")
 
-    
+#Cog class
+class Cog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+#Help page
+@client.command(name = "help")
+async def help(ctx):
+    embed = discord.Embed(color = discord.Color.green(), title = "Commands")
+    topCountries = "`+top countries`\n Shows the top 3 most searched countries in the server\n"
+    topDecades = "`+top decades`\n Shows the top 3 most searched decades in the server\n"
+    topSongs = "`+top songs`\n Shows the top 3 most liked songs in the server (react with :heart: to like a song)"
+    topText = topCountries + topDecades + topSongs
+    embed.add_field(name = "+list", value = "`+list [decade]`\n Sends a list of countries in the world by decade ranging from 1900 to 2020", inline = False)
+    embed.add_field(name = "+song", value = "`+song [country] [decade]`\n Sends a song released from the inputted country during the specified decade\n (ex: +song Japan 1980)", inline = False)
+    embed.add_field(name = "+top", value = topText)
+    await ctx.send(embed = embed)
+
+#Pulls up list of countries
 @client.command(name = "list") #Pulls up list of countries for each decade
 async def _list(ctx, year: int): 
+    clist = []
     try:
         if year < 1900 or year > 2020:
             raise Exception("Year must be between 1900 and 2020")
@@ -35,128 +55,87 @@ async def _list(ctx, year: int):
         await ctx.send(e)
     else:
         clist = allCountries(year)
-    
-        page1 = discord.Embed(
-            title = str(year) + "s Countries (1/" + str(len(clist)) + ")",
-            description = clist[0],
-            color = discord.Color.blurple()
-        )
-        page2 = discord.Embed(
-            title = str(year) + "s Countries (2/" + str(len(clist)) + ")",
-            description = clist[1],
-            color = discord.Color.blurple()
-        )
-        page3 = discord.Embed(
-            title = str(year) + "s Countries (3/" + str(len(clist)) + ")",
-            description = clist[2],
-            color = discord.Color.blurple()
-        )
-        pages = [page1, page2, page3]
-        
-        if len(clist) == 4:
-            page4 = discord.Embed(
-                title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
-                description = clist[3],
-                color = discord.Color.blurple()
-            )
-            pages.append(page4)
-        elif len(clist) == 5:
-            page4 = discord.Embed(
-                title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
-                description = clist[3],
-                color = discord.Color.blurple()
-            )
-            pages.append(page4)
-            page5 = discord.Embed(
-                title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
-                description = clist[4],
-                color = discord.Color.blurple()
-            )
-            pages.append(page5)
-        elif len(clist) == 6:
-            page4 = discord.Embed(
-                title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
-                description = clist[3],
-                color = discord.Color.blurple()
-            )
-            pages.append(page4)
-            page5 = discord.Embed(
-                title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
-                description = clist[4],
-                color = discord.Color.blurple()
-            )
-            pages.append(page5)
-            page6 = discord.Embed(
-                title = str(year) + "s Countries (6/" + str(len(clist)) + ")",
-                description = clist[5],
-                color = discord.Color.blurple()
-            )
-            pages.append(page6)
-        elif len(clist) == 7:
-            page4 = discord.Embed(
-                title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
-                description = clist[3],
-                color = discord.Color.blurple()
-            )
-            pages.append(page4)
-            page5 = discord.Embed(
-                title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
-                description = clist[4],
-                color = discord.Color.blurple()
-            )
-            pages.append(page5)
-            page6 = discord.Embed(
-                title = str(year) + "s Countries (6/" + str(len(clist)) + ")",
-                description = clist[5],
-                color = discord.Color.blurple()
-            )
-            pages.append(page6)
-            page7 = discord.Embed(
-                title = str(year) + "s Countries (7/" + str(len(clist)) + ")",
-                description = clist[6],
-                color = discord.Color.blurple()
-            )
-            pages.append(page7)
-            
-        
-        message = await ctx.send(embed = page1)
-        await message.add_reaction('⏮')
-        await message.add_reaction('◀')
-        await message.add_reaction('▶')
-        await message.add_reaction('⏭')
-    
-        def check(reaction, user):
-            return user == ctx.author
-    
-        i = 0
-        reaction = None
-    
-        while True:
-            if str(reaction) == '⏮':
-                i = 0
-                await message.edit(embed = pages[i])
-            elif str(reaction) == '◀':
-                if i > 0:
-                    i -= 1
-                    await message.edit(embed = pages[i])
-            elif str(reaction) == '▶':
-                if i < len(clist) - 1:
-                    i += 1
-                    await message.edit(embed = pages[i])
-            elif str(reaction) == '⏭':
-                i = len(clist) - 1
-                await message.edit(embed = pages[i])
-            
-            try:
-                reaction, user = await client.wait_for('reaction_add', timeout = 50.0, check = check)
-                await message.remove_reaction(reaction, user)
-            except:
-                break
-    
-        await message.clear_reactions()
 
+    page1 = discord.Embed(
+        title = str(year) + "s Countries (1/" + str(len(clist)) + ")",
+        description = clist[0],
+        color = discord.Color.blurple()
+    )
+    page2 = discord.Embed(
+        title = str(year) + "s Countries (2/" + str(len(clist)) + ")",
+        description = clist[1],
+        color = discord.Color.blurple()
+    )
+
+    page3 = discord.Embed(
+        title = str(year) + "s Countries (3/" + str(len(clist)) + ")",
+        description = clist[2],
+        color = discord.Color.blurple()
+    )
+
+    pages = [page1, page2, page3]
+
+    if len(clist) >= 4:
+        page4 = discord.Embed(
+            title = str(year) + "s Countries (4/" + str(len(clist)) + ")",
+            description = clist[3],
+            color = discord.Color.blurple()
+        )
+        pages.append(page4)
+    
+    if len(clist) >= 5:
+        page5 = discord.Embed(
+            title = str(year) + "s Countries (5/" + str(len(clist)) + ")",
+            description = clist[4],
+            color = discord.Color.blurple()
+        )
+        pages.append(page5)
+    
+    if len(clist) >= 6:
+        page6 = discord.Embed(
+            title = str(year) + "s Countries (6/" + str(len(clist)) + ")",
+            description = clist[5],
+            color = discord.Color.blurple()
+        )
+        pages.append(page6)
+    
+    if len(clist) >= 7:
+        page7 = discord.Embed(
+            title = str(year) + "s Countries (7/" + str(len(clist)) + ")",
+            description = clist[6],
+            color = discord.Color.blurple()
+        )
+        pages.append(page7)
+
+    
+    def check(reaction, user):
+              return user == ctx.author
+
+    i = 0
+    #await ctx.send(embed = pages[0])
+    message = await ctx.send(embed = pages[i])
+    await message.add_reaction('⏮')
+    await message.add_reaction('◀')
+    await message.add_reaction('▶')
+    await message.add_reaction('⏭')
+
+    while True:
+        reaction, user = await client.wait_for("reaction_add", timeout = 60, check = check)
+        if str(reaction.emoji) == '⏮':
+            i = 0 
+        elif str(reaction.emoji) == '◀':
+            if i > 0:
+                i -= 1
+        elif str(reaction.emoji) == '▶':
+            if i < (len(clist)) - 1: 
+                i += 1
+        elif str(reaction.emoji) == '⏭':
+            i = len(clist) - 1
+
+        await message.edit(embed = pages[i])
         
 
+#Make song and top go into one class
 @client.command(name = "song", pass_context = True) #Plays music based on command
 async def song(ctx, *args): #Args include word(s) in the country's name and year
     country = " ".join(args[0:len(args) - 1])
@@ -164,7 +143,7 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
     valid = True
     try:
         if len(args) == 1 or args[len(args) - 1].isnumeric() == False: 
-            raise Exception("Please re-enter your command in the format '+play [country] [year]'")
+            raise Exception("Please re-enter your command in the format '+song [country] [year]'")
         elif int(year) < 1900 or int(year) > 2020:
             raise Exception("Year must be between 1900 and 2020")
         elif int(year) % 10 != 0:
@@ -211,5 +190,9 @@ async def top(ctx, category):
         except Exception as e:
             await ctx.send(e)
 
+def setup(bot):
+    pass #Add classes to Cog
 
-client.run('a')
+#client.help_command = helpPage()
+
+
