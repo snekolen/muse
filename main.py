@@ -3,6 +3,7 @@ from discord import voice_client
 from discord.ext import commands
 from finder import findSong, findUrl
 from countries import allCountries, countryExists
+from checker import Info, updateAllC, updateTopC, s
 
 client = commands.Bot(command_prefix = "+")
 client.remove_command("help")
@@ -132,20 +133,20 @@ class Menu(commands.Cog):
                     i += 1
             elif str(reaction.emoji) == '⏭':
                 i = len(clist) - 1
-
-            await message.edit(embed = pages[i])
+            
+            message1 = await ctx.channel.fetch_message(message.id)
+            #await message1.remove_reaction(reaction.emoji, user)
+            await message1.edit(embed = pages[i])
             
 
-class Songs(commands.Cog):
-    def __init__(self, ID):
-        self.ID = ID #Guild id
-
+#s = Info()
 
 @client.command(name = "song", pass_context = True) #Plays music based on command
 async def song(ctx, *args): #Args include word(s) in the country's name and year
     country = " ".join(args[0:len(args) - 1])
     year = args[len(args) - 1]
     valid = True
+    #s = Songs() #Variable used to access Songs class
     try:
         if len(args) == 1 or args[len(args) - 1].isnumeric() == False: 
             raise Exception("Please re-enter your command in the format '+song [country] [year]'")
@@ -159,8 +160,14 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         valid = False
         await ctx.send(e)
 
+    
+
     #Finding and playing songs
     if valid == True:
+        #Country
+        updateAllC(country)
+        updateTopC(country)
+        #Decade
         songDict = findSong(country, int(year))
         songDict = findUrl(songDict)
         imgLink = "https://img.youtube.com/vi/" + songDict["ID"] + "/0.jpg"
@@ -182,13 +189,28 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
 #Create a class to keep track of top countries, decades, and songs
 @client.command(name = "top") #Pulls up list of top countries, decades, and songs
 async def top(ctx, category):
-    #serverName = client.get_guild()
+    name = ctx.message.guild.name
     if category == "countries":
-        await ctx.send("a")
+        topList = discord.Embed(
+            title = "Top Countries in " + name,
+            color = discord.Color.red()
+        )
+        allC = s.get_allC()
+        topC = s.get_topC()
+        await ctx.send(allC) #works
+        await ctx.send(topC)
     elif category == "decades":
-        pass
+        topList = discord.Embed(
+            title = "Top Decades in " + name,
+            color = discord.Color.red()
+        )
+        await ctx.send(embed = topList)
     elif category == "songs":
-        pass
+        topList = discord.Embed(
+            title = "Top Songs in " + name,
+            color = discord.Color.red()
+        )
+        await ctx.send(embed = topList)
     else:
         try:
             raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'countries', 'decades', and 'songs'")
@@ -197,6 +219,4 @@ async def top(ctx, category):
 
 def setup(bot):
     pass #Add classes to Cog
-
-#client.help_command = helpPage()
 
