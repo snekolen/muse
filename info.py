@@ -100,22 +100,46 @@ def updateTopC(country):
                   cDict["2"] = cDict["1"]
                   cDict["1"] = sec
       elif len(cDict) == 3: #When top 3 is full
-            pass
-      
+            if c["Country"] == cDict["1"]["Country"]:
+                  pass
+            elif c["Country"] == cDict["2"]["Country"]: #If country is the 2nd one
+                  if c["Count"] >= cDict["1"]["Count"]:
+                        sec = cDict["2"]
+                        cDict["2"] = cDict["1"]
+                        cDict["1"] = sec
+            elif c["Country"] == cDict["3"]["Country"]: #If country is the 3rd one
+                  if c["Count"] >= cDict["1"]["Count"]:
+                        cDict["3"] = cDict["2"]
+                        cDict["2"] = cDict["1"]
+                        cDict["1"] = c
+                  elif c["Count"] >= cDict["2"]["Count"]: 
+                        third = cDict["3"]
+                        cDict["3"] = cDict["2"]
+                        cDict["2"] = third
+            elif c["Country"] != cDict["1"]["Country"] or c["Country"] != cDict["2"]["Country"] or c["Country"] != cDict["3"]["Country"]: #If country is not in cDict
+                  if c["Count"] >= cDict["1"]["Count"]:
+                        cDict["3"] = cDict["2"]
+                        cDict["2"] = cDict["1"]
+                        cDict["1"] = c
+                  elif c["Count"] >= cDict["2"]["Count"]: 
+                        cDict["3"] = cDict["2"]
+                        cDict["2"] = c
+                  elif c["Count"] >= cDict["3"]["Count"]: 
+                        cDict["3"] = c
       s.set_topC(cDict)
       #Get dict with country in it by going through cArr
 
 #Top decades
-def updateAllD(decade, dArr):
+def updateAllD(decade):
       pass
 
-def updateTopD(decade, dArr):
+def updateTopD(decade):
       pass
 
 #Top songs
-def updateAllS(title, author, country, year, sArr):
+def updateAllS(title, author, country):
       pass
 
-def updateTopS(title, author, country, year, sArr):
+def updateTopS(title, author, country):
       pass
 
