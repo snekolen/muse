@@ -1,3 +1,4 @@
+'''
 class Info():
       def __init__(self):
             self.allCountries = []
@@ -19,20 +20,7 @@ class Info():
       
       def set_topC(self, cDict):
             self.topCountries = cDict
-      
 
-      #Dicts for decades
-      def get_allD(self):
-            pass
-
-      def get_topD(self):
-            pass
-
-      def set_allD(self, decade):
-            pass
-
-      def set_topD(self, dDict):
-            pass
 
       #Dicts for songs
       def get_allS(self):
@@ -142,4 +130,64 @@ def updateAllS(title, author, country):
 
 def updateTopS(title, author, country):
       pass
+'''
 
+class Info():
+      def __init__(self):
+            self.allTerms = []
+            self.topTerms = {}
+            self.allSongs = []
+            self.topSongs = {}
+
+      #Search terms
+      def get_allT(self):
+            return self.allTerms
+
+      def get_topT(self):
+            return self.topTerms
+
+      def set_allT(self, tArr):
+            self.allTerms = tArr
+
+      def set_topT(self, tDict):
+            self.topTerms = tDict
+
+      #Songs
+      def get_allS(self):
+            pass
+
+      def get_topS(self):
+            pass
+
+      def set_allS(self, sArr):
+            pass
+
+      def set_topS(self, sDict):
+            pass
+
+
+s = Info()
+
+#Search terms
+def updateAllT(country, decade):
+      tArr = s.get_allT()
+      found = False
+      for item in tArr:
+            if item["Country"] == country:
+                  item["Count"] += 1
+                  found = True
+                  break
+      if found == False:
+            t = {"Country": country, "Decade": decade, "Count": 1}
+            tArr.append(t)
+      s.set_allT(tArr)
+
+def updateTopT(country, decade):
+      pass
+
+#Songs
+def updateAllS(song, artist, country, decade):
+      pass
+
+def updateTopS(song, artist, conuntry, decade):
+      pass

@@ -3,7 +3,7 @@ from discord import voice_client
 from discord.ext import commands
 from finder import findSong, findUrl
 from countries import allCountries, countryExists
-from checker import Info, updateAllC, updateTopC, s
+from info import Info, updateAllT, updateTopT, s
 
 client = commands.Bot(command_prefix = "+")
 client.remove_command("help")
@@ -160,13 +160,13 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         valid = False
         await ctx.send(e)
 
-    
+    updateAllT(country, year)
 
     #Finding and playing songs
     if valid == True:
         #Country
-        updateAllC(country)
-        updateTopC(country)
+        #updateAllC(country)
+        #updateTopC(country)
         #Decade
         songDict = findSong(country, int(year))
         songDict = findUrl(songDict)
@@ -190,21 +190,13 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
 @client.command(name = "top") #Pulls up list of top countries, decades, and songs
 async def top(ctx, category):
     name = ctx.message.guild.name
-    if category == "countries":
-        topList = discord.Embed(
-            title = "Top Countries in " + name,
-            color = discord.Color.red()
-        )
-        allC = s.get_allC()
-        topC = s.get_topC()
-        await ctx.send(allC) #works
-        await ctx.send(topC)
-    elif category == "decades":
+    if category == "searched":
         topList = discord.Embed(
             title = "Top Decades in " + name,
             color = discord.Color.red()
         )
-        await ctx.send(embed = topList)
+        t = s.get_allT()
+        await ctx.send(t)
     elif category == "songs":
         topList = discord.Embed(
             title = "Top Songs in " + name,
@@ -219,4 +211,5 @@ async def top(ctx, category):
 
 def setup(bot):
     pass #Add classes to Cog
+
 
