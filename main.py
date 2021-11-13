@@ -1,7 +1,7 @@
 import discord
 from discord import voice_client
 from discord.ext import commands
-from finder import findSong, findUrl
+from finder import findSong, findUrl, TOKEN
 from countries import allCountries, countryExists
 from info import Info, updateAllT, updateTopT, s
 
@@ -198,7 +198,7 @@ async def top(ctx, category):
         await ctx.send(tt)
     elif category == "songs":
         topList = discord.Embed(
-            title = "Top Songs in " + name,
+            title = "Recently Liked Songs in " + name,
             color = discord.Color.red()
         )
         await ctx.send(embed = topList)
@@ -211,5 +211,5 @@ async def top(ctx, category):
 def setup(bot):
     pass #Add classes to Cog
 
-client.run('ODk5MDAyNzQyOTg5NzkxMjcz.YWsbjA.06gOf7oTZL9jMfhSsw1OO-7pLvw')
+client.run(TOKEN)
 

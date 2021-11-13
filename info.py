@@ -84,13 +84,38 @@ def updateTopT(country, decade):
                         tDict["2"] = tDict["1"]
                         tDict["1"] = sec 
       elif len(tDict) == 3:
-            pass
+            if t["Country"] == tDict["1"]["Country"] and t["Decade"] == tDict["1"]["Decade"]: #Term is 1st
+                  pass
+            elif t["Country"] == tDict["2"]["Country"] and t["Decade"] == tDict["2"]["Decade"]: #Term is 2nd
+                  if t["Count"] >= tDict["1"]["Count"]:
+                        sec = tDict["2"]
+                        tDict["2"] = tDict["1"]
+                        tDict["1"] = sec
+            elif t["Country"] == tDict["3"]["Country"] and t["Decade"] == tDict["3"]["Decade"]:
+                  if t["Count"] >= tDict["1"]["Count"]:
+                        tDict["3"] = tDict["2"]
+                        tDict["2"] = tDict["1"]
+                        tDict["1"] = t
+                  elif t["Count"] >= tDict["2"]["Count"]:
+                        third = tDict["3"]
+                        tDict["3"] = tDict["2"]
+                        tDict["2"] = third
+            else: #If country is not in dict
+                  if t["Count"] >= tDict["1"]["Count"]:
+                        tDict["3"] = tDict["2"]
+                        tDict["2"] = tDict["1"]
+                        tDict["1"] = t
+                  elif t["Count"] >= tDict["2"]["Count"]:
+                        tDict["3"] = tDict["2"]
+                        tDict["2"] = t
+                  elif t["Count"] >= tDict["3"]["Count"]:
+                        tDict["3"] = t
 
       s.set_topT(tDict)
 
 #Songs
-def updateAllS(song, artist, country, decade):
+def updateAllS(song, artist):
       pass
 
-def updateTopS(song, artist, conuntry, decade):
+def updateTopS(song, artist):
       pass
