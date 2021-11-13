@@ -161,13 +161,10 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         await ctx.send(e)
 
     updateAllT(country, year)
+    updateTopT(country, year)
 
     #Finding and playing songs
     if valid == True:
-        #Country
-        #updateAllC(country)
-        #updateTopC(country)
-        #Decade
         songDict = findSong(country, int(year))
         songDict = findUrl(songDict)
         imgLink = "https://img.youtube.com/vi/" + songDict["ID"] + "/0.jpg"
@@ -190,13 +187,15 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
 @client.command(name = "top") #Pulls up list of top countries, decades, and songs
 async def top(ctx, category):
     name = ctx.message.guild.name
-    if category == "searched":
+    if category == "terms":
         topList = discord.Embed(
-            title = "Top Decades in " + name,
+            title = "Top Search Terms in " + name,
             color = discord.Color.red()
         )
         t = s.get_allT()
+        tt = s.get_topT()
         await ctx.send(t)
+        await ctx.send(tt)
     elif category == "songs":
         topList = discord.Embed(
             title = "Top Songs in " + name,
@@ -205,11 +204,12 @@ async def top(ctx, category):
         await ctx.send(embed = topList)
     else:
         try:
-            raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'countries', 'decades', and 'songs'")
+            raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'terms' and 'songs'")
         except Exception as e:
             await ctx.send(e)
 
 def setup(bot):
     pass #Add classes to Cog
 
+client.run('ODk5MDAyNzQyOTg5NzkxMjcz.YWsbjA.06gOf7oTZL9jMfhSsw1OO-7pLvw')
 
