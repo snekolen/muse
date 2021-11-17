@@ -210,20 +210,23 @@ async def top(ctx, category):
             title = "Top Search Terms in " + name,
             color = discord.Color.red()
         )
-        #t = s.get_allT()
-        #tt = s.get_topT()
-        #await ctx.send(t)
-        #await ctx.send(tt)
-        await ctx.send(topList.title)
+        #await ctx.send(topList.title)
+        await ctx.send("t")
     elif category == "songs":
         counter = 0
         async for message in ctx.channel.history(limit = 200):
             embeds = message.embeds
+            reactions = message.reactions
+            for reaction in reactions:
+                if str(reaction.emoji) == '❤️':
+                    rCount = reaction.count
+                    #print(rCount)
             for embed in embeds:
                 e = embed.to_dict()
                 if "♫" in e["title"]:
+                    #print("a")
                     counter += 1
-                    print(e)
+            
         await ctx.send(counter)
     else:
         try:
