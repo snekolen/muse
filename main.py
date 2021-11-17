@@ -1,9 +1,11 @@
 import discord
 from discord import voice_client
+from discord.embeds import EmptyEmbed
 from discord.ext import commands
+from discord.utils import get
 from finder import findSong, findUrl, TOKEN
 from countries import allCountries, countryExists
-from info import Info, updateAllT, updateTopT, s
+from info import Info, updateAllT, updateTopT, s, updateRecentS
 
 client = commands.Bot(command_prefix = "+")
 client.remove_command("help")
@@ -30,7 +32,7 @@ class Cog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-#Pulls up songs and help page
+#Pulls up songs and help page (Need to update)
 class Menu(commands.Cog):
     @client.command(name = "help")
     async def help(ctx):
@@ -135,11 +137,10 @@ class Menu(commands.Cog):
                 i = len(clist) - 1
             
             message1 = await ctx.channel.fetch_message(message.id)
-            #await message1.remove_reaction(reaction.emoji, user)
             await message1.edit(embed = pages[i])
             
 
-#s = Info()
+m = None
 
 @client.command(name = "song", pass_context = True) #Plays music based on command
 async def song(ctx, *args): #Args include word(s) in the country's name and year
@@ -181,8 +182,25 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         embed.add_field(name = "Country ", value = country, inline = True)
         embed.set_thumbnail(url = imgLink)
 
-        await ctx.send(embed=embed)
+        m = await ctx.send(embed=embed)
 
+        '''
+        m = await ctx.channel.fetch_message(message.id)
+
+        reaction = get(m.reactions, emoji = '❤️')
+        num_reactions = reaction.count
+
+        updateRecentS(songDict["Song"], songDict["Artist"], 0)
+        '''
+
+'''
+async def count_react(message):
+    def check(message):
+        return message.author.id == 899002742989791273
+'''
+    
+    #Use message.channel to get channel
+    #899002742989791273
 #Create a class to keep track of top countries, decades, and songs
 @client.command(name = "top") #Pulls up list of top countries, decades, and songs
 async def top(ctx, category):
@@ -192,16 +210,21 @@ async def top(ctx, category):
             title = "Top Search Terms in " + name,
             color = discord.Color.red()
         )
-        t = s.get_allT()
-        tt = s.get_topT()
-        await ctx.send(t)
-        await ctx.send(tt)
+        #t = s.get_allT()
+        #tt = s.get_topT()
+        #await ctx.send(t)
+        #await ctx.send(tt)
+        await ctx.send(topList.title)
     elif category == "songs":
-        topList = discord.Embed(
-            title = "Recently Liked Songs in " + name,
-            color = discord.Color.red()
-        )
-        await ctx.send(embed = topList)
+        counter = 0
+        async for message in ctx.channel.history(limit = 200):
+            embeds = message.embeds
+            for embed in embeds:
+                e = embed.to_dict()
+                if "♫" in e["title"]:
+                    counter += 1
+                    print(e)
+        await ctx.send(counter)
     else:
         try:
             raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'terms' and 'songs'")
