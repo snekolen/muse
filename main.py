@@ -213,21 +213,32 @@ async def top(ctx, category):
         #await ctx.send(topList.title)
         await ctx.send("t")
     elif category == "songs":
-        counter = 0
+        rec3 = []
         async for message in ctx.channel.history(limit = 200):
             embeds = message.embeds
             reactions = message.reactions
+            rCount = 0
             for reaction in reactions:
                 if str(reaction.emoji) == '❤️':
                     rCount = reaction.count
-                    #print(rCount)
+            title = ""
+            artist = ""
             for embed in embeds:
                 e = embed.to_dict()
-                if "♫" in e["title"]:
-                    #print("a")
-                    counter += 1
-            
-        await ctx.send(counter)
+                if len(rec3) == 3:
+                    break
+                if ("♫" in e["title"]) and rCount > 0:
+                    i = 3
+                    while e["description"][i] != "]":
+                        title += e["description"][i]
+                        i += 1
+                    artist = e["fields"][0]["value"]
+                    sD = {"Title": title, "Artist": artist, "Count": rCount}
+                    rec3.append(sD)
+                    
+        #Organize values in rec3 into embed
+        for r in rec3:
+            await ctx.send(r)
     else:
         try:
             raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'terms' and 'songs'")
