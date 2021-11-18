@@ -248,10 +248,41 @@ async def top(ctx, category):
                     artist = e["fields"][0]["value"]
                     sD = {"Title": title, "Artist": artist, "Count": rCount}
                     rec3.append(sD)
+        
+        topList = discord.Embed(
+            title = "Recently liked songs in " + name, 
+            color = discord.Color.greyple()
+        )
 
-        #Organize values in rec3 into embed
-        for r in rec3:
-            await ctx.send(r)
+        tName = "" #Title
+        aName = "" #Artist
+        cNum = "" #Count
+
+        if len(rec3) == 0:
+            tName = None
+            aName = None
+            cNum = None
+        
+        if len(rec3) >= 1:
+            tName += (rec3[0]["Title"] + "\n\n")
+            aName += (rec3[0]["Artist"] + "\n\n")
+            cNum += (str(rec3[0]["Count"]) + "\n\n")
+        
+        if len(rec3) >= 2:
+            tName += (rec3[1]["Title"] + "\n\n")
+            aName += (rec3[1]["Artist"] + "\n\n")
+            cNum += (str(rec3[1]["Count"]) + "\n\n")    
+
+        if len(rec3) >= 3:
+            tName += (rec3[2]["Title"] + "\n\n")
+            aName += (rec3[2]["Artist"] + "\n\n")
+            cNum += (str(rec3[2]["Count"]) + "\n\n")     
+
+        topList.add_field(name = "TItle", value = tName, inline = True)
+        topList.add_field(name = "Artist", value = aName, inline = True)
+        topList.add_field(name = "❤️", value = cNum, inline = True)
+
+        await ctx.send(embed = topList)
     else:
         try:
             raise Exception("Plase re-enter your command in the format '+top [category]', where the only valid terms for [category] are 'terms' and 'songs'")
