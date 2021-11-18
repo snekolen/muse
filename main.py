@@ -161,11 +161,10 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         valid = False
         await ctx.send(e)
 
-    updateAllT(country, year)
-    updateTopT(country, year)
-
     #Finding and playing songs
     if valid == True:
+        updateAllT(country, year)
+        updateTopT(country, year)
         songDict = findSong(country, int(year))
         songDict = findUrl(songDict)
         imgLink = "https://img.youtube.com/vi/" + songDict["ID"] + "/0.jpg"
@@ -182,22 +181,7 @@ async def song(ctx, *args): #Args include word(s) in the country's name and year
         embed.add_field(name = "Country ", value = country, inline = True)
         embed.set_thumbnail(url = imgLink)
 
-        m = await ctx.send(embed=embed)
-
-        '''
-        m = await ctx.channel.fetch_message(message.id)
-
-        reaction = get(m.reactions, emoji = '❤️')
-        num_reactions = reaction.count
-
-        updateRecentS(songDict["Song"], songDict["Artist"], 0)
-        '''
-
-'''
-async def count_react(message):
-    def check(message):
-        return message.author.id == 899002742989791273
-'''
+        await ctx.send(embed=embed)
     
     #Use message.channel to get channel
     #899002742989791273
@@ -207,11 +191,40 @@ async def top(ctx, category):
     name = ctx.message.guild.name
     if category == "terms":
         topList = discord.Embed(
-            title = "Top Search Terms in " + name,
+            title = "Top 3 Search Terms in " + name,
             color = discord.Color.red()
         )
-        #await ctx.send(topList.title)
-        await ctx.send("t")
+        t = s.get_topT()
+        
+        cName = "" #Country
+        dName = "" #Decade
+        cNum = "" #Count
+
+        if len(t) == 0:
+           cName = None 
+           dName = None
+           cNum = None   
+        
+        if len(t) >= 1:
+            cName += (t["1"]["Country"] + "\n\n")
+            dName += (t["1"]["Decade"] + "\n\n")
+            cNum += (str(t["1"]["Count"]) + "\n\n")
+        
+        if len(t) >= 2:
+            cName += (t["2"]["Country"] + "\n\n")
+            dName += (t["2"]["Decade"] + "\n\n")
+            cNum += (str(t["2"]["Count"]) + "\n\n")
+
+        if len(t) == 3:
+            cName += (t["3"]["Country"])
+            dName += (t["3"]["Decade"])
+            cNum += (str(t["3"]["Count"]))
+
+        topList.add_field(name = "Country", value = cName, inline = True)
+        topList.add_field(name = "Decade", value = dName, inline = True)
+        topList.add_field(name = "🔎", value = cNum, inline = True)
+        
+        await ctx.send(embed = topList)
     elif category == "songs":
         rec3 = []
         async for message in ctx.channel.history(limit = 200):
@@ -228,14 +241,14 @@ async def top(ctx, category):
                 if len(rec3) == 3:
                     break
                 if ("♫" in e["title"]) and rCount > 0:
-                    i = 3
-                    while e["description"][i] != "]":
+                    i = 2
+                    while e["description"][i] != "*":
                         title += e["description"][i]
                         i += 1
                     artist = e["fields"][0]["value"]
                     sD = {"Title": title, "Artist": artist, "Count": rCount}
                     rec3.append(sD)
-                    
+
         #Organize values in rec3 into embed
         for r in rec3:
             await ctx.send(r)
