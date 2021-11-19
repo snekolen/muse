@@ -7,14 +7,17 @@ Muse is a Discord bot that sends an embed containing information about a song's 
 ### Inviting to Server
 The invite link for Muse is in the line below:
 ```https://tinyurl.com/muse-bot```
-##### Intructions:
+#### Intructions:
 1. Click the link above to get to the invite page of Muse.
 2. Select the server you would like to invite Muse to.
 3. Click authorize.
 4. Complete the Captcha on the authorization page.
 5. The bot can now be used in the server.
 ### Commands
-
+#### +list
+#### +song
+#### +top
+#### Error Handling
 
 ## APIs Used
 ### Discord
