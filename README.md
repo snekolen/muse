@@ -13,11 +13,11 @@ The invite link for Muse is in the line below:\
 #### Intructions:
 1. Click the link above to get to the invite page of Muse.
 2. Select the server you would like to invite Muse to.
-![landing](https://i.imgur.com/lUXrmsT.png = 414x896)
+<img src="https://i.imgur.com/lUXrmsT.png" alt="landing" width="414" height="896" />
 3. Click authorize and follow proceeding steps.
-![authentication](https://i.imgur.com/Cm00s2c.png = 414x896)
+<img src="https://i.imgur.com/Cm00s2c.png" alt="authentication" width="414" height="896" />
 4. The bot can now be used in the server.
-![server](https://i.imgur.com/eJxFuKo.jpg = 414x404)
+<img src="https://i.imgur.com/eJxFuKo.jpg" alt="server" width="414" height="404" />
 ### Commands
 #### +list
 ```+list [decade]``` \
