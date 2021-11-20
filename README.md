@@ -13,14 +13,11 @@ The invite link for Muse is in the line below:\
 #### Intructions:
 1. Click the link above to get to the invite page of Muse.
 2. Select the server you would like to invite Muse to.
-![landing](https://i.imgur.com/lUXrmsT.png)
-img[alt=landing] { width: 200px; }
+![landing](https://i.imgur.com/lUXrmsT.png = 414x896)
 3. Click authorize and follow proceeding steps.
-![authentication](https://i.imgur.com/Cm00s2c.png)
-img[alt=authentication] { width: 200px; }
+![authentication](https://i.imgur.com/Cm00s2c.png = 414x896)
 4. The bot can now be used in the server.
-![server](https://i.imgur.com/eJxFuKo.jpg)
-img[alt=server] { width: 200px; }
+![server](https://i.imgur.com/eJxFuKo.jpg = 414x404)
 ### Commands
 #### +list
 ```+list [decade]``` \
@@ -39,7 +36,8 @@ The program uses try-catch blocks where it outlines if/else statements to determ
 
 ## Advanced
 ### APIs
-#### Discord.py
+#### Discord py
+The Discord.py API provides a general framework for 
 #### Musicbrainzngs
 #### Unidecode
 #### URL Lib and Re
@@ -47,6 +45,7 @@ The program uses try-catch blocks where it outlines if/else statements to determ
 #### Cog
 #### Menu
 #### Music
+#### Info
 
 ## Development 
 ### Shift in Purpose
