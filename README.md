@@ -17,7 +17,7 @@ The invite link for Muse is in the line below:\
 3. Click authorize and follow proceeding steps.
 <img src="https://i.imgur.com/Cm00s2c.png" alt="authentication" width="414" height="896" />
 4. The bot can now be used in the server.
-<img src="https://i.imgur.com/eJxFuKo.jpg" alt="server" width="414" height="404" />
+<img src="https://i.imgur.com/eJxFuKo.jpg" alt="server" width="414" height="404" /> \
 ### Commands
 #### +list
 ```+list [decade]``` \
