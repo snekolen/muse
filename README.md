@@ -2,8 +2,8 @@
 
 ## Description
 Muse is a Discord bot that sends an embed containing information about a song's title, artist, and release country and date based the user inputted country and decade.  The idea of this bot is inspired by Radiooooo.com, which uses a similar method to determine songs to play.  In other words, it's like Radiooooo but as a music library bot.  Additionally, Muse keeps track of the most searched terms and recently liked songs among all servers.  It is built using Discord's and various other APIs that will be described in its usage in a later section of this ReadME. \
-**Language(s):** Python \
-**Developer:** Helen Ma
+* **Language(s):** Python \
+* **Developer:** Helen Ma
 
 
 ## Usage
@@ -62,9 +62,12 @@ Info is a non-Cog class that keeps track of all and top 3 search terms.
 ### Shift in Purpose
 Initially, Muse was called Jukebox since it was meant to play songs in Discord voice channels, but music bots like Rhythm that serve the same purpose shut down due to receiving cease and desist orders from YouTube.  Like Rhythm, Muse downloads MP4s from YouTube and plays them in Discord channels.  This procedure had to be scrapped to prevent potential lawsuits, so the bot was renamed Muse after Greek goddesses of art and was turned into a music library bot.
 ### Troubleshooting
-Throught the development of Muse, the bot was tested in my Discord server called Snecc island.  
+Throughout the development of Muse, the bot was tested in Snecc island.  The steps of testing different cases of user inputs are as follows: 
+1. Send the module as a list or dictionary in the server to check if a test case has been met.
+2. Edit the code and test it with the unmet test case until all cases have been met.
+3. Repeat steps 1-2 until all test within a command are met.
+4. Organize all data under a command into an embed that can be sent in the server.
+Troubleshooting Muse was an intensive process that involved months and thousands to messages, but following the steps above helped make bot testing less stressful.  
 
-## Closing
-
-
-^*The profile picture here is the one used before Muse was finalized
+## Notes
+^The profile picture here is the one used before Muse was finalized
