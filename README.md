@@ -61,6 +61,7 @@ Info is a non-Cog class that keeps track of all and top 3 search terms.
 ## Development 
 ### Shift in Purpose
 Initially, Muse was called Jukebox since it was meant to play songs in Discord voice channels, but music bots like Rhythm that serve the same purpose shut down due to receiving cease and desist orders from YouTube.  Like Rhythm, Muse downloads MP4s from YouTube and plays them in Discord channels.  This procedure had to be scrapped to prevent potential lawsuits, so the bot was renamed Muse after Greek goddesses of art and was turned into a music library bot.
+Muse also started as a group project but later turned into a solo project and previous commits to Muse can be found here: https://github.com/Jukebox-Devs/jukebox/commits/main
 ### Troubleshooting
 Throughout the development of Muse, the bot was tested in Snecc island.  The steps of testing different cases of user inputs are as follows: 
 1. Send the module as a list or dictionary in the server to check if a test case has been met.
