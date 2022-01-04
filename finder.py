@@ -42,7 +42,7 @@ searchLink = "https://www.youtube.com/results?search_query="
 watchLink = "https://www.youtube.com/" #Includes watch? after
 
 
-def findSong(country, year): #Finds songs on musicbrainz and returns them
+def queue(country, year): #Finds songs on musicbrainz and returns them
     lastYear = year
     if year == 2020: #Use random function to generate no.
         lastYear += 2
@@ -73,9 +73,13 @@ def findUrl(songDict): #Passes in a dictionary
     vidIDs = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     watchLink += vidIDs[0]
     songDict["URL"] = watchLink
-    songDict["ID"] = vidIDs[0]
     return songDict
 
 
+#dicts = queue("United States", 1990)
+#print(addUrl(dicts))
+#song = queue("United States", 2010)
+#print(findUrl(song))
+#print(findUrl(song))
 
 

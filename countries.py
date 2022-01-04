@@ -220,4 +220,3 @@ def allCountries(year):
 def countryExists(country, year):
     countryList = countriesList(year)
     return country in countryList
-
