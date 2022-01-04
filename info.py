@@ -2,8 +2,7 @@ class Info():
       def __init__(self):
             self.allTerms = []
             self.topTerms = {}
-            self.allSongs = []
-            self.topSongs = {}
+            self.recentS = []
 
       #Search terms
       def get_allT(self):
@@ -19,18 +18,12 @@ class Info():
             self.topTerms = tDict
 
       #Songs
-      def get_allS(self):
-            pass
+      def get_recentS(self):
+            return self.recentS
 
-      def get_topS(self):
-            pass
-
-      def set_allS(self, sArr):
-            pass
-
-      def set_topS(self, sDict):
-            pass
-
+      def set_recentS(self, sArr):
+            self.recentS = sArr
+      
 
 s = Info()
 
@@ -110,12 +103,23 @@ def updateTopT(country, decade):
                         tDict["2"] = t
                   elif t["Count"] >= tDict["3"]["Count"]:
                         tDict["3"] = t
-
       s.set_topT(tDict)
 
 #Songs
-def updateAllS(song, artist):
-      pass
+def updateRecentS(song, artist, count): #Uses a queue structure
+      sArr = s.get_recentS()
+      
+      item = {"Song": song, "Artist": artist, "Count": count}
+      if len(sArr) <= 2:
+            sArr.append(item)
+      else:
+            sArr.pop(len(sArr) - 1)
+            sArr.insert(0, item)
+      s.set_recentS(sArr)
 
-def updateTopS(song, artist):
-      pass
+'''
+a = ["a", "b", "c"]
+
+while len(a) > 0:
+      print(a.pop(len(a) - 1))
+'''
