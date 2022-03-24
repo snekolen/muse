@@ -1,0 +1,9 @@
+glt+https://github.com/Rapptz/discord.py@rewrite
+PyNaCl==1.5.0
+dnspython==2.2.1
+musicbrainzngs==0.7.1
+unidecode==1.3.4
+os
+random
+regex
+urllib.request
