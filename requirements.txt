@@ -4,4 +4,4 @@ dnspython==2.2.1
 musicbrainzngs==0.7.1
 unidecode==1.3.4
 regex
-urllib.request
+
