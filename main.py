@@ -1,6 +1,6 @@
 import discord
 from discord import voice_client
-from discord.embeds import EmptyEmbed
+import discord.embeds 
 from discord.ext import commands
 from discord.utils import get
 from finder import findSong, findUrl, TOKEN
